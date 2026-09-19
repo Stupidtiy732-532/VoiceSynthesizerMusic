@@ -1,17 +1,60 @@
-# This is a sample Python script.
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import os
 
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+from voicesynth.core.score import Note, Score
+from voicesynth.engines.classical import ClassicalEngine
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+def main():
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    score = Score(tempo=120)
+
+    melody = [
+
+        ("a", 60, 0.8),
+        ("s", 60, 0.8),
+        ("f", 60, 0.8),
+        ("m", 60, 0.8),
+        ("l", 60, 0.8),
+        ("ka", 60, 0.8),
+
+    ]
+
+    for phoneme, midi_note, duration in melody:
+
+        score.add_note(
+            Note(
+                phoneme=phoneme,
+                midi_note=midi_note,
+                duration=duration
+            )
+        )
+
+    engine = ClassicalEngine()
+
+    audio = engine.synthesize(score)
+
+    os.makedirs(
+        "output",
+        exist_ok=True
+    )
+
+    audio.save(
+        "output/singing.wav"
+    )
+
+    print(
+        "Generated:",
+        audio.duration,
+        "seconds"
+    )
+
+    print(
+        "Saved to:",
+        "output/singing.wav"
+    )
+
+
+if __name__ == "__main__":
+
+    main()
